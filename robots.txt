@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://wooabroker.wooahouse.com/sitemap.xml

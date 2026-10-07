@@ -1,0 +1,81 @@
+---
+layout: default
+---
+
+<div class="page-with-sidebar">
+<div class="camp-page">
+
+  <nav class="breadcrumb" aria-label="위치">
+    <a href="/">홈</a>
+    <span>›</span>
+    <a href="/region/{{ page.doShort | uri_escape }}/">{{ page.doShort }}</a>
+    <span>›</span>
+    <a href="/region/{{ page.doShort | uri_escape }}/{{ page.sgSlug | uri_escape }}/">{{ page.sigungu }}</a>
+    <span>›</span>
+    <a href="/region/{{ page.doShort | uri_escape }}/{{ page.sgSlug | uri_escape }}/{{ page.dong | uri_escape }}/">{{ page.dongLabel }}</a>
+  </nav>
+
+  <div class="camp-header">
+    <div class="camp-tags">
+      <span class="tag tag-type">📍 {{ page.doShort }} {{ page.sigungu }} {{ page.dongLabel }}</span>
+      <span class="tag tag-safe">🏠 {{ page.kind }}{% unless page.kind == "중개법인" %}사무소{% endunless %}</span>
+      {% if page.ddc == "Y" %}<span class="tag tag-safe">✅ 공제가입</span>{% endif %}
+    </div>
+    <h1 class="camp-title">{{ page.officeName }}</h1>
+    <div class="camp-info-row"><span class="camp-info-icon">🔖</span><span>개설등록번호 <strong>{{ page.regNo }}</strong></span></div>
+    {% if page.road != "" %}<div class="camp-info-row"><span class="camp-info-icon">📍</span><span>{{ page.road }}</span></div>{% endif %}
+    {% if page.lot != "" %}<div class="camp-info-row"><span class="camp-info-icon">🏘️</span><span>지번 {{ page.lot }}</span></div>{% endif %}
+    {% if page.tel != "" %}<div class="camp-info-row"><span class="camp-info-icon">📞</span><a href="tel:{{ page.tel }}">{{ page.tel }}</a></div>{% endif %}
+    {% if page.rep != "" %}<div class="camp-info-row"><span class="camp-info-icon">👤</span><span>대표자 {{ page.rep }}</span></div>{% endif %}
+    {% if page.home != "" %}<div class="camp-info-row"><span class="camp-info-icon">🔗</span><a href="{{ page.home }}" target="_blank" rel="noopener noreferrer nofollow">홈페이지</a></div>{% endif %}
+  </div>
+
+  <div class="ad-slot">
+    {% include ad.html %}
+  </div>
+
+  <div class="camp-section trust-box">
+    <h2>📋 등록 정보</h2>
+    <div class="kv">
+      <div><small>개설등록일</small><b>{% if page.regDate != "" %}{{ page.regDate }}{% else %}정보 없음{% endif %}</b>{% if page.regYears %}<small>등록 {{ page.regYears }}년차</small>{% endif %}</div>
+      <div><small>공제(보증) 가입</small><b>{% if page.ddc == "Y" %}가입{% elsif page.ddc == "N" %}미가입 표시{% else %}정보 없음{% endif %}</b></div>
+      {% if page.emp %}<div><small>소속공인중개사</small><b>{{ page.emp }}명</b></div>{% endif %}
+      {% if page.asst %}<div><small>중개보조원</small><b>{{ page.asst }}명</b></div>{% endif %}
+    </div>
+    <p class="kv-note">전국공인중개사사무소표준데이터 기준(데이터 기준일 {{ page.refDate }})입니다. 이후 휴업·폐업·이전은 반영되지 않았을 수 있으니 계약 전 관할 시·군·구청 또는 사무소에 직접 확인하세요. <a href="/guide/">계약 전 확인 체크리스트 →</a></p>
+  </div>
+
+  <div class="camp-section">
+    <h2>📍 {{ page.dongLabel }}에서의 위치</h2>
+    <p class="ctx">
+      {{ page.doShort }} {{ page.sigungu }} {{ page.dongLabel }}에는 공공데이터에 등록된 공인중개사사무소가 총 <strong>{{ page.dongCount }}곳</strong> 있고,
+      {{ page.officeName }}은(는) 개설등록이 오래된 순서로 <strong>{{ page.dongRank }}번째</strong>입니다.
+      {% if page.roadName != "" and page.roadCount >= 3 %}같은 {{ page.roadName }}에는 {{ page.roadCount }}곳의 중개사무소가 있습니다.{% endif %}
+    </p>
+    <p class="ctx-links">
+      <a href="/region/{{ page.doShort | uri_escape }}/{{ page.sgSlug | uri_escape }}/{{ page.dong | uri_escape }}/">{{ page.sigungu }} {{ page.dongLabel }} 공인중개사사무소 전체 →</a>
+      {% if page.roadName != "" and page.roadCount >= 3 %}<br><a href="/road/{{ page.doShort | uri_escape }}/{{ page.sgSlug | uri_escape }}/{{ page.roadName | uri_escape }}/">{{ page.sigungu }} {{ page.roadName }} 공인중개사사무소 →</a>{% endif %}
+    </p>
+    {% assign addr_q = page.road %}{% if addr_q == "" %}{% assign addr_q = page.lot %}{% endif %}
+    <a href="https://map.kakao.com/?q={{ addr_q | uri_escape }}" class="reserve-btn secondary" style="margin-top:12px;display:block;">🗺️ 카카오맵에서 위치 확인</a>
+  </div>
+
+  <div class="ad-slot">
+    {% include ad.html %}
+  </div>
+
+  {% if page.near.size > 0 %}
+  <div class="region-camps">
+    <h2>{{ page.sigungu }} {{ page.dongLabel }} 다른 공인중개사사무소</h2>
+    <ul class="office-list">
+      {% for n in page.near %}<li><a href="/office/{{ n.slug }}/"><b>{{ n.name }}</b></a></li>
+      {% endfor %}
+    </ul>
+  </div>
+  {% endif %}
+
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"RealEstateAgent","name":{{ page.officeName | jsonify }},"identifier":{{ page.regNo | jsonify }},"address":{"@type":"PostalAddress","streetAddress":{{ addr_q | jsonify }},"addressCountry":"KR"}{% if page.tel != "" %},"telephone":{{ page.tel | jsonify }}{% endif %}}</script>
+
+</div>
+<aside class="tool-sidebar"></aside>
+</div>

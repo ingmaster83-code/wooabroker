@@ -1,0 +1,33 @@
+title: 우아중개사 - 전국 공인중개사사무소 등록 정보
+description: >-
+  전국 공인중개사사무소 6만9천여 곳의 개설등록번호·등록일·대표자·공제가입 여부를
+  동·시군구별로 확인하세요. 계약 전 정식 등록된 중개사무소인지 점검할 수 있습니다.
+url: "https://wooabroker.wooahouse.com"
+baseurl: ""
+lang: ko
+timezone: Asia/Seoul
+author: WooaHouse
+
+markdown: kramdown
+kramdown:
+  input: GFM
+  hard_wrap: false
+
+plugins:
+  - jekyll-seo-tag
+
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - scripts/
+  - "*.py"
+  - "*.log"
+  - README.md
+  - .gitignore
+  - .env
+  - vendor/
+  - _rawdata/
+
+# 설계 메모: 전국공인중개사사무소표준데이터(제공 지자체 154/250곳, 약 6.9만 건).
+# 시도→시군구→동/읍/면 허브(서버사이드 목록, 상한 300) + 도로명 허브 + 사무소 상세 페이지.
+# 80k URL이라 jekyll-sitemap 대신 _plugins/broker_generator.rb 의 분할 사이트맵(40k씩+인덱스) 사용.

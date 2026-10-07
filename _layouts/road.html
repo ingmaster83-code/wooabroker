@@ -1,0 +1,71 @@
+---
+layout: default
+---
+
+<div class="page-with-sidebar">
+<div class="region-page">
+
+  <nav class="breadcrumb" aria-label="위치">
+    <a href="/">홈</a>
+    <span>›</span>
+    <a href="/region/{{ page.doShort | uri_escape }}/">{{ page.doShort }}</a>
+    <span>›</span>
+    <a href="/region/{{ page.doShort | uri_escape }}/{{ page.sgSlug | uri_escape }}/">{{ page.sigungu }}</a>
+    <span>›</span>
+    <span>{{ page.road }}</span>
+  </nav>
+
+  <div class="region-page-header">
+    <h1>🏠 {{ page.sigungu }} {{ page.road }} 공인중개사사무소·부동산</h1>
+    <p>{{ page.doShort }} {{ page.sigungu }} {{ page.road }} · 총 {{ page.totalCount }}곳</p>
+  </div>
+
+  <div class="ad-slot">
+    {% include ad.html %}
+  </div>
+
+  <div style="margin-bottom:16px;">
+    <input type="text" id="officeFilter" class="search-input" style="border:1px solid #E5E7EB;" placeholder="상호명으로 이 지역 안에서 다시 찾기...">
+  </div>
+
+  {% if page.truncated %}
+  <div style="background:#EEF2FF;border:1px solid #C7D2FE;border-radius:10px;padding:14px 18px;margin-bottom:20px;font-size:.87rem;color:#3730A3;">
+    사무소가 많아 상호 가나다순 상위 {{ page.items.size }}곳만 표시합니다. <a href="/search/?q={{ page.sigungu | uri_escape }}" style="color:#4F46E5;font-weight:700;">검색으로 찾아보기 →</a>
+  </div>
+  {% endif %}
+
+  <ul class="office-list" id="officeGrid">
+    {% for s in page.items %}<li><a href="/office/{{ s.slug }}/"><b>{{ s.officeName }}</b><small>{% if s.road != "" %}{{ s.road }}{% else %}{{ s.lot }}{% endif %} · {{ s.regNo }}{% if s.ddc == "Y" %} · 공제가입{% endif %}</small></a></li>
+    {% endfor %}
+  </ul>
+  <p id="noResult" style="display:none;color:#6B7280;text-align:center;padding:20px;">검색 결과가 없습니다.</p>
+
+  <div style="margin-top:40px;background:#F9FAFB;border-radius:14px;padding:24px 28px;">
+    <h2 style="font-size:1.05rem;font-weight:700;margin-bottom:12px;">{{ page.sigungu }} {{ page.road }} 부동산, 계약 전에 확인하세요</h2>
+    <p style="color:#374151;line-height:1.8;font-size:.9375rem;margin-bottom:12px;">
+      중개사무소는 사무소 소재지 관할 시·군·구청에 개설등록을 해야 영업할 수 있습니다. 위 목록은 공공데이터로 제공된 등록 정보이며,
+      계약 직전에는 중개사무소 등록증, 공인중개사 자격증, 공제(보증보험) 증서를 직접 확인하는 것이 안전합니다.
+    </p>
+    <ul style="color:#374151;line-height:1.8;font-size:.9rem;padding-left:20px;">
+      <li>등록증의 상호·대표자·소재지가 간판·계약서와 일치하는지 확인</li>
+      <li>공제(보증) 가입 증서의 보장 기간과 금액 확인</li>
+      <li>계약 당사자(집주인)의 신분증과 등기부등본상 소유자가 같은지 확인</li>
+    </ul>
+  </div>
+
+</div>
+<aside class="tool-sidebar"></aside>
+</div>
+
+<script>
+document.getElementById('officeFilter').addEventListener('input', function(e) {
+  const q = e.target.value.trim().toLowerCase();
+  let visible = 0;
+  document.querySelectorAll('#officeGrid li').forEach(c => {
+    const match = !q || (c.querySelector('b').textContent || '').toLowerCase().includes(q);
+    c.style.display = match ? '' : 'none';
+    if (match) visible++;
+  });
+  document.getElementById('noResult').style.display = visible === 0 ? '' : 'none';
+});
+</script>
