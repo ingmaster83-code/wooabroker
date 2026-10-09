@@ -51,6 +51,7 @@ layout: default
       <li>공제(보증) 가입 증서의 보장 기간과 금액 확인</li>
       <li>계약 당사자(집주인)의 신분증과 등기부등본상 소유자가 같은지 확인</li>
     </ul>
+    {% if page.dong != "기타" %}<p style="margin-top:12px;"><a href="https://wooatown.wooahouse.com/동네/{{ page.doShort | uri_escape }}/{{ page.sgSlug | uri_escape }}/{{ page.dong | uri_escape }}/" style="color:#4F46E5;font-weight:700;">🏘️ {{ page.dongLabel }} 전체 생활정보 (우아동네) →</a></p>{% endif %}
   </div>
 
 </div>
