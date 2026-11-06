@@ -1,0 +1,68 @@
+---
+layout: default
+title: "부동산 중개수수료 계산기 — 매매·전세·월세 복비 요율표"
+description: "부동산 중개수수료(복비) 계산기와 매매·전세·월세 요율표. 거래금액별 상한 금액, 월세 환산법, 오피스텔 요율, 부가세까지 한 번에."
+---
+
+<div class="page-with-sidebar">
+<div class="region-page">
+
+  <nav class="breadcrumb" aria-label="위치"><a href="/">홈</a> <span>›</span> <span>중개수수료</span></nav>
+
+  <div class="region-page-header">
+    <h1>🧮 부동산 중개수수료 계산기 — 매매·전세·월세</h1>
+    <p>복비 계산 · 요율표 · 월세 환산 · 부가세</p>
+  </div>
+
+  <div class="ad-slot">
+    {% include ad.html %}
+  </div>
+
+  <p class="ctx" style="margin-bottom:20px;">부동산 중개수수료(중개보수, 복비)는 <b>거래금액 × 상한요율</b> 이내에서 중개사와 협의해 정하며, 일부 구간은 한도액이 있습니다. 부가가치세 10%는 별도이고 매도인·매수인(임대인·임차인)이 각각 지급합니다. 월세는 보증금 + 월세 × 100(5천만원 미만이면 × 70)으로 환산합니다. 아래 계산기로 바로 계산하거나 금액별 표를 확인하세요.</p>
+  <div class="camp-section">
+    <h2>🧮 중개수수료 계산기</h2>
+    <div class="tool-box"><div class="tool-row"><div><label for="fee-type">거래 종류</label><select id="fee-type"><option value="sale">매매</option><option value="jeonse">전세</option><option value="wolse">월세</option></select></div><div><label for="fee-dep">매매가·보증금(만원)</label><input id="fee-dep" type="number" value="30000" style="width:130px"></div><div id="fee-rent-wrap" style="display:none"><label for="fee-rent">월세(만원)</label><input id="fee-rent" type="number" value="50" style="width:90px"></div><button class="btn-p" id="fee-go">계산</button></div><div class="tool-out" id="fee-out">금액을 입력하고 계산을 누르세요.</div></div><script>
+(function(){
+var SALE=[[5e7,0.006,25e4],[2e8,0.005,8e5],[9e8,0.004,0],[12e8,0.005,0],[15e8,0.006,0],[0,0.007,0]];
+var LEASE=[[5e7,0.005,2e5],[1e8,0.004,3e5],[6e8,0.003,0],[12e8,0.004,0],[15e8,0.005,0],[0,0.006,0]];
+function fee(t,a){for(var i=0;i<t.length;i++){if(t[i][0]===0||a<t[i][0]){var f=a*t[i][1];if(t[i][2])f=Math.min(f,t[i][2]);return [Math.round(f),t[i][1]];}}}
+function fmt(n){return Math.round(n).toLocaleString('ko-KR');}
+document.getElementById('fee-go').addEventListener('click',function(){
+ var type=document.getElementById('fee-type').value;
+ var dep=(parseFloat(document.getElementById('fee-dep').value)||0)*10000;
+ var rent=(parseFloat(document.getElementById('fee-rent').value)||0)*10000;
+ var a=dep,t=type==='sale'?SALE:LEASE,note='';
+ if(type==='wolse'&&rent>0){a=dep+rent*100;if(a<5e7)a=dep+rent*70;note=' (월세 환산금액 '+fmt(a)+'원)';}
+ if(a<=0){document.getElementById('fee-out').textContent='금액을 입력하세요.';return;}
+ var r=fee(t,a);
+ document.getElementById('fee-out').innerHTML='중개보수 상한 <b>'+fmt(r[0])+'원</b> (상한요율 '+(r[1]*100).toFixed(1)+'%'+note+')<br>부가세 포함 <b>'+fmt(r[0]*1.1)+'원</b> · 매도인·매수인(임대인·임차인) 각각';
+});
+document.getElementById('fee-type').addEventListener('change',function(){document.getElementById('fee-rent-wrap').style.display=this.value==='wolse'?'inline-block':'none';});
+})();
+</script>
+  </div>
+  <div class="camp-section">
+    <h2>🏠 매매·교환 요율표</h2>
+    <div class="tbl-wrap"><table class="tbl"><thead><tr><th>거래금액</th><th class="num">상한요율</th><th class="num">한도액</th></tr></thead><tbody><tr><td>5천만 원 미만</td><td class="num">0.6%</td><td class="num">250,000원</td></tr><tr><td>5천만 원 이상 ~ 2억 원 미만</td><td class="num">0.5%</td><td class="num">800,000원</td></tr><tr><td>2억 원 이상 ~ 9억 원 미만</td><td class="num">0.4%</td><td class="num">한도 없음</td></tr><tr><td>9억 원 이상 ~ 12억 원 미만</td><td class="num">0.5%</td><td class="num">한도 없음</td></tr><tr><td>12억 원 이상 ~ 15억 원 미만</td><td class="num">0.6%</td><td class="num">한도 없음</td></tr><tr><td>15억 원 이상</td><td class="num">0.7%</td><td class="num">한도 없음</td></tr></tbody></table></div>
+  </div>
+  <div class="camp-section">
+    <h2>🔑 임대차(전세·월세) 요율표</h2>
+    <div class="tbl-wrap"><table class="tbl"><thead><tr><th>거래금액</th><th class="num">상한요율</th><th class="num">한도액</th></tr></thead><tbody><tr><td>5천만 원 미만</td><td class="num">0.5%</td><td class="num">200,000원</td></tr><tr><td>5천만 원 이상 ~ 1억 원 미만</td><td class="num">0.4%</td><td class="num">300,000원</td></tr><tr><td>1억 원 이상 ~ 6억 원 미만</td><td class="num">0.3%</td><td class="num">한도 없음</td></tr><tr><td>6억 원 이상 ~ 12억 원 미만</td><td class="num">0.4%</td><td class="num">한도 없음</td></tr><tr><td>12억 원 이상 ~ 15억 원 미만</td><td class="num">0.5%</td><td class="num">한도 없음</td></tr><tr><td>15억 원 이상</td><td class="num">0.6%</td><td class="num">한도 없음</td></tr></tbody></table></div>
+  </div>
+  <div class="camp-section">
+    <h2>📋 바로가기</h2>
+    <div class="chips"><a class="chip" href="/fee/sale/">매매가별 표</a><a class="chip" href="/fee/jeonse/">전세 보증금별 표</a><a class="chip" href="/fee/wolse/">월세 보증금·월세별 표</a><a class="chip" href="/fee/officetel/">오피스텔 중개수수료</a><a class="chip" href="/fee/sale/3억/">3억 매매</a><a class="chip" href="/fee/sale/5억/">5억 매매</a><a class="chip" href="/fee/jeonse/2억/">전세 2억</a><a class="chip" href="/fee/wolse/1천/50/">보증금 1천 월세 50</a></div>
+  </div>
+  <p class="ctx" style="font-size:.85rem;color:#6B7280;">중개보수는 거래금액 × 상한요율 이내에서 중개의뢰인과 개업공인중개사가 협의해 정하며 한도액을 넘을 수 없습니다. 부가가치세(10%)는 별도이고, 매도인·매수인(임대인·임차인)이 각각 부담합니다. 요율은 시·도 조례가 정하는데 이 표는 공인중개사법 시행규칙 별표와 경기도 조례(2022.3.4. 시행)를 기준으로 했습니다. 지역별 조례가 다르거나 2026년 8월 시행규칙 개정에 따라 조례가 바뀌면 달라질 수 있으니 계약 전 해당 시·도 조례를 확인하세요.</p>
+<div class="chips"><a class="chip" href="/guide/">계약 전 체크리스트</a><a class="chip" href="/region/">중개사무소 찾기</a></div>
+
+  <div class="camp-section">
+    <h2>자주 묻는 질문</h2>
+    <details style="margin-bottom:10px;"><summary style="cursor:pointer;font-weight:600;padding:6px 0;">중개수수료는 누가 내나요?</summary><p class="ctx">매매는 매도인과 매수인이, 임대차는 임대인과 임차인이 각각 중개보수를 지급합니다.</p></details><details style="margin-bottom:10px;"><summary style="cursor:pointer;font-weight:600;padding:6px 0;">중개수수료는 협의가 가능한가요?</summary><p class="ctx">상한요율은 최대치이고 그 이내에서 협의해 정합니다. 한도액이 있는 구간은 한도를 넘을 수 없습니다.</p></details><details style="margin-bottom:10px;"><summary style="cursor:pointer;font-weight:600;padding:6px 0;">중개수수료는 언제 내나요?</summary><p class="ctx">약정이 없으면 거래대금 지급이 완료된 날 지급합니다.</p></details><details style="margin-bottom:10px;"><summary style="cursor:pointer;font-weight:600;padding:6px 0;">부가세가 포함된 금액인가요?</summary><p class="ctx">표의 상한은 부가세 별도이며 부가세 포함 금액을 따로 표시했습니다.</p></details>
+  </div>
+
+  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "중개수수료는 누가 내나요?", "acceptedAnswer": {"@type": "Answer", "text": "매매는 매도인과 매수인이, 임대차는 임대인과 임차인이 각각 중개보수를 지급합니다."}}, {"@type": "Question", "name": "중개수수료는 협의가 가능한가요?", "acceptedAnswer": {"@type": "Answer", "text": "상한요율은 최대치이고 그 이내에서 협의해 정합니다. 한도액이 있는 구간은 한도를 넘을 수 없습니다."}}, {"@type": "Question", "name": "중개수수료는 언제 내나요?", "acceptedAnswer": {"@type": "Answer", "text": "약정이 없으면 거래대금 지급이 완료된 날 지급합니다."}}, {"@type": "Question", "name": "부가세가 포함된 금액인가요?", "acceptedAnswer": {"@type": "Answer", "text": "표의 상한은 부가세 별도이며 부가세 포함 금액을 따로 표시했습니다."}}]}</script>
+
+</div>
+<aside class="tool-sidebar"></aside>
+</div>
